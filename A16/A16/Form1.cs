@@ -33,7 +33,7 @@ namespace A16
             SqlCommand Komanda3 = new SqlCommand(query3, Konekcija);
 
             SqlDataReader reader;
-            //popunjavanje combobox-eva iz baze, tri odvojena upita definisana malopre
+            
             try
             {
                 Konekcija.Open();
@@ -84,16 +84,16 @@ namespace A16
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // iz combobox-ova se izdvajaju selektovane vrednosti, prvi deo informacije
+            // iz combobox-ova se izdvajaju selektovane vrednosti
             string strPasID = cBPas.Text;
-            //podstring, od nulte pozicije do prvog pojavljivanja razmaka!! Bitan mehanizam!
-            //izdvaja ID psa iz comboBox1 stringa, isto vazi i u sledećim redovima
+            //podstring, od nulte pozicije do prvog pojavljivanja razmaka
+           
             strPasID = strPasID.Substring(0, strPasID.IndexOf(" "));
             string strIzlozbaID = cBIzlozba.Text;
             strIzlozbaID = strIzlozbaID.Substring(0, strIzlozbaID.IndexOf(" "));
             string strKategorijaID = cBKategorija.Text;
             strKategorijaID = strKategorijaID.Substring(0, strKategorijaID.IndexOf(" "));
-            // proverava se da li već postoji red u tabeli Prijava
+            
             string query1 = "SELECT PasID FROM Prijava WHERE PasID = " + strPasID
                         + " AND IzlozbaID = '" + strIzlozbaID + "';";
             string query2 = "INSERT INTO Prijava ( PasID, IzlozbaID, KategorijaID ) VALUES ("
@@ -107,8 +107,7 @@ namespace A16
             {
                Konekcija.Open();
                 reader = Komanda4.ExecuteReader();
-                if (!reader.HasRows)  // pod uslovom da nema već unetog psa + izložbe !!
-                // (if je OK ako prvi selekt ne daje ni jedan jedini pasID, tj. nije ranije unošen taj pas
+                if (!reader.HasRows)  
                 {
                     reader.Close();
                     Komanda5.ExecuteNonQuery();  // može unos !
@@ -129,16 +128,13 @@ namespace A16
 
         private void PostaviTab2()
         {
-            // popunjavanje comboboxa na drugom tabu - u vezi Izlozbi. Mora da postoji izlozba u tabeli Rezultat!
+            
 
             string query1 = "SELECT I.IzlozbaID, Mesto, Datum FROM Izlozba I WHERE " +
                     "EXISTS ( SELECT R.IzlozbaID FROM Rezultat R WHERE I.IzlozbaID = R.IzlozbaID) " +
                     "ORDER BY IzlozbaID ASC;";
 
-            // prebrojavaju se psi u Rezultat tabeli, izgleda da ovo nisam iskoristio
-            //string query2 = "SELECT COUNT(PasID) FROM Rezultat;";
-
-            // standardni konekcioni pristup
+            
             SqlCommand Komanda1 = new SqlCommand(query1, Konekcija);
             SqlDataReader reader;
             try
@@ -148,7 +144,7 @@ namespace A16
 
                 reader = Komanda1.ExecuteReader();
 
-                // popunjava se kombo box na 2. tabu, isti mehanizam kao na prethodnom tabu
+                
                 while (reader.Read())
                 {
                     string[] row = { reader[0].ToString(), reader[1].ToString(), reader[2].ToString() };
@@ -176,7 +172,7 @@ namespace A16
 
             // popunjavanje DesignView i Chart komponentu! Koristimo ds i adapter, beskonekcioni pristup.
 
-            // prvo izvlačimo šifru iz combobox4!
+            
             string strIzlozbaID = cBIzlozba2.Text;
             strIzlozbaID = strIzlozbaID.Substring(0, strIzlozbaID.IndexOf(" "));
 
@@ -191,7 +187,7 @@ namespace A16
             reader.Close();
             Konekcija.Close();
 
-            // o ovome valja razmišljati... za analizu je, i radi - što je najbitnije.
+          
             string query = "SELECT k.KategorijaID, k.Naziv, COUNT(r.PasID) AS br_pasa FROM rezultat r, kategorija k " +
                 "WHERE r.IzlozbaID = '" + strIzlozbaID + "' AND r.kategorijaID = k.kategorijaID " +
                 "GROUP BY k.KategorijaID, k.Naziv ORDER BY k.KategorijaID, k.Naziv ASC; ";
@@ -202,7 +198,7 @@ namespace A16
 
             try
             {
-                // ovo je sve ručno postavljeno, "Takmicenje" su proizvoljan naziv tabele koji se kasnije koristi
+                
                 Konekcija.Open();
                 adapter.Fill(ds, "Takmicenje");
                 dataGridView1.DataSource = ds.Tables["Takmicenje"].DefaultView;
@@ -210,11 +206,10 @@ namespace A16
                 dataGridView1.Columns[1].HeaderText = "Naziv kategorije";
                 dataGridView1.Columns[2].HeaderText = "Broj pasa";
 
-                // suma broja pasa u 3. koloni gridview1, nazvanoj "br_pasa" u prethodnom SQL upitu
+               
                 label10.Text = Convert.ToString(ds.Tables[0].Compute("Sum(br_pasa)", String.Empty));
 
-                // za chart je u Properties postavljen SERIES na Takmicenje i tamo se podešava tip charta
-                // i ponešto još od atributa, a ovde u kodu se naznačava sadržaj X i Y ose na osnovu DS
+                
                 chart1.Titles.Clear();
                 chart1.Titles.Add("KATEGORIJE"); // bez naslova neće da radi, ne znam zašto
                 chart1.DataSource = ds;
