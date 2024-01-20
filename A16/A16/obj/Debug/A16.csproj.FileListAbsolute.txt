@@ -1,0 +1,10 @@
+G:\ProgramiC\A16\A16\bin\Debug\A16.exe.config
+G:\ProgramiC\A16\A16\bin\Debug\A16.exe
+G:\ProgramiC\A16\A16\bin\Debug\A16.pdb
+G:\ProgramiC\A16\A16\obj\Debug\A16.Properties.Resources.resources
+G:\ProgramiC\A16\A16\obj\Debug\A16.csproj.GenerateResource.cache
+G:\ProgramiC\A16\A16\obj\Debug\A16.csproj.CoreCompileInputs.cache
+G:\ProgramiC\A16\A16\obj\Debug\A16.exe
+G:\ProgramiC\A16\A16\obj\Debug\A16.pdb
+G:\ProgramiC\A16\A16\obj\Debug\A16.csprojAssemblyReference.cache
+G:\ProgramiC\A16\A16\obj\Debug\A16.Form1.resources
